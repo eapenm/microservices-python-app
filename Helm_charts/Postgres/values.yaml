@@ -6,6 +6,6 @@ service:
 container:
   image: postgres
   env:
-    user: nasi
+    user: eapen
     password: cnd2023
     db: authdb
