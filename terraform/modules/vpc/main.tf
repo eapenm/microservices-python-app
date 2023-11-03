@@ -1,0 +1,93 @@
+resource "aws_vpc" "my_vpc" {
+  cidr_block = var.vpc_cidr
+}
+
+resource "aws_subnet" "my_subnet" {
+  count             = length(var.subnet_cidrs)
+  vpc_id            = aws_vpc.my_vpc.id
+  cidr_block        = var.subnet_cidrs[count.index]
+  availability_zone = element(["us-east-1a", "us-east-1b", "us-east-1d"], count.index)
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "igw"
+  }
+}
+
+
+resource "aws_route_table" "custom_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route = [
+    {
+      cidr_block                 = "0.0.0.0/0"
+      gateway_id                 = aws_internet_gateway.igw.id
+      nat_gateway_id             = ""
+      carrier_gateway_id         = ""
+      destination_prefix_list_id = ""
+      egress_only_gateway_id     = ""
+      instance_id                = ""
+      ipv6_cidr_block            = ""
+      local_gateway_id           = ""
+      network_interface_id       = ""
+      transit_gateway_id         = ""
+      vpc_endpoint_id            = ""
+      vpc_peering_connection_id  = ""
+    },
+  ]
+
+  tags = {
+    Name = "public"
+  }
+}
+
+# Associate the custom route table with the subnets
+resource "aws_route_table_association" "subnet_associations" {
+  count          = length(aws_subnet.my_subnet)
+  subnet_id      = aws_subnet.my_subnet[count.index].id
+  route_table_id = aws_route_table.custom_route_table.id
+}
+
+resource "aws_security_group" "eks_node_security_group" {
+  name_prefix = "eks-node-sg"
+  description = "Security Group for Amazon EKS Nodes"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  # Inbound rules
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Add more inbound rules as needed
+
+  # Outbound rules
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

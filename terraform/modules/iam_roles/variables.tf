@@ -1,0 +1,1 @@
+# Define any role-specific variables if needed
