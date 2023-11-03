@@ -1,7 +1,8 @@
 resource "aws_eks_node_group" "eks_node_group" {
-  cluster_name    = aws_eks_cluster.my_eks_cluster.name
+  cluster_name    = var.clustername
+    # cluster_name    = aws_eks_cluster.my_eks_cluster.name
   node_group_name = var.node_group_name
-  node_role_arn   = aws_iam_role.my_eks_cluster_role.arn
+  node_role_arn   = var.eks_cluster_node_role_arn
 
   scaling_config {
     min_size     = var.min_size
@@ -10,9 +11,9 @@ resource "aws_eks_node_group" "eks_node_group" {
   }
 
   instance_types = var.instance_types
-  subnet_ids     = aws_subnet.my_subnet[*].id
+  subnet_ids     = var.subnets
   remote_access {
-    source_security_group_ids = [aws_security_group.eks_node_security_group.id] # Specify your security group here
+    source_security_group_ids = [var.sg_id] # Specify your security group here
   }
   update_config {
     max_unavailable = 1

@@ -33,3 +33,18 @@ variable "subnets" {
   description = "List of subnet IDs where nodes will be placed"
   type        = list(string)
 }
+
+variable "clustername"{
+  description = "EKS Cluster name"
+  type= string
+  default = "my-eks-cluster"
+}
+variable "eks_cluster_node_role_arn" {
+  description = "ARN of the IAM role for the EKS cluster"
+  type        = string
+}
+
+variable "sg_id" {
+  description = "Name of the security group id"
+  type        = string
+}

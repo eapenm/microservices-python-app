@@ -1,6 +1,7 @@
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
+  default = "my-eks-cluster"
 }
 
 variable "eks_cluster_role_arn" {
@@ -9,3 +10,7 @@ variable "eks_cluster_role_arn" {
 }
 
 # Define other cluster-specific variables
+variable "subnet_ids"{
+  description = "Name the subnet_ids"
+  type=list(string)
+}

@@ -35,6 +35,7 @@ resource "aws_route_table" "custom_route_table" {
       transit_gateway_id         = ""
       vpc_endpoint_id            = ""
       vpc_peering_connection_id  = ""
+      core_network_arn = aws_internet_gateway.igw.arn
     },
   ]
 
