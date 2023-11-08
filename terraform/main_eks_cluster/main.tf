@@ -19,7 +19,7 @@ module "iam_roles" {
 
 # Create the EKS cluster using the EKS module
 module "eks" {
-  source               = "../modules/eks"
+  source               = "../modules/eks_cluster"
   cluster_name         = var.cluster_name
   eks_cluster_role_arn = var.eks_cluster_role_arn
   subnet_ids           = var.subnet_ids
