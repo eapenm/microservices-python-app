@@ -1,18 +1,28 @@
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr
+  tags = {
+    Name = "${var.project_name}-vpc"
+  }
 }
 
+data "aws_availability_zones" "available_zones" {}
+
 resource "aws_subnet" "my_subnet" {
-  count             = length(var.subnet_cidrs)
-  vpc_id            = aws_vpc.my_vpc.id
-  cidr_block        = var.subnet_cidrs[count.index]
-  availability_zone = element(["us-east-1a", "us-east-1b", "us-east-1d"], count.index)
+  count      = length(var.subnet_cidrs)
+  vpc_id     = aws_vpc.my_vpc.id
+  cidr_block = var.subnet_cidrs[count.index]
+  #availability_zone = element(["us-east-1a", "us-east-1b", "us-east-1d"], count.index)
+  availability_zone       = data.aws_availability_zones.available_zones.name[count.index]
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "${var.project_name}-${data.aws_availability_zones.available_zones.name[count.index]}-Subnet"
+  }
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.my_vpc.id
   tags = {
-    Name = "igw"
+    Name = "${var.project_name}-igw"
   }
 }
 
@@ -20,6 +30,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_route_table" "custom_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
+<<<<<<< Updated upstream
   route = [
     {
       cidr_block                 = "0.0.0.0/0"
@@ -39,8 +50,14 @@ resource "aws_route_table" "custom_route_table" {
     },
   ]
 
+=======
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+>>>>>>> Stashed changes
   tags = {
-    Name = "public"
+    Name = "${var.project_name}-route-table"
   }
 }
 
@@ -90,5 +107,8 @@ resource "aws_security_group" "eks_node_security_group" {
     to_port     = -1
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.project_name}-EKS-SG"
   }
 }
