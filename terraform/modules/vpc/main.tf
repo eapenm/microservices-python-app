@@ -30,7 +30,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_route_table" "custom_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
-  route = {
+  route = [{
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
     nat_gateway_id             = ""
@@ -45,7 +45,7 @@ resource "aws_route_table" "custom_route_table" {
     vpc_endpoint_id            = ""
     vpc_peering_connection_id  = ""
     core_network_arn           = aws_internet_gateway.igw.arn 
-  }
+  },]
   tags = {
     Name = "${var.project_name}-route-table"
   }
