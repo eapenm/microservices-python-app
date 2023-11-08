@@ -24,14 +24,17 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "eks_cluster_role_arn" {
-  description = "ARN of the IAM role for the EKS cluster"
-  type        = string
-}
+# EKS Node
+variable "node_group_name" {}
+variable "min_size" {}
+variable "desired_size" {}
+variable "max_size" {}
+variable "instance_types" {}
+#variable "subnet_ids" {}
+#variable "clustername"{}
+#variable "eks_cluster_node_role_arn" {}
+#variable "source_security_group_ids" {}
 
-# Define other cluster-specific variables
-variable "subnet_ids" {
-  description = "Name the subnet_ids"
-  type        = list(string)
-}
-variable "project_name" {}
+
+
+

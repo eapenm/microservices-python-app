@@ -2,7 +2,6 @@
 variable "node_group_name" {
   description = "Name of the EKS node group"
   type        = string
-  default     = "nodes"
 }
 
 variable "min_size" {
@@ -29,7 +28,7 @@ variable "instance_types" {
   default     = ["t3.medium"]
 }
 
-variable "subnets" {
+variable "subnet_ids" {
   description = "List of subnet IDs where nodes will be placed"
   type        = list(string)
 }
@@ -44,7 +43,8 @@ variable "eks_cluster_node_role_arn" {
   type        = string
 }
 
-variable "sg_id" {
+variable "source_security_group_ids" {
   description = "Name of the security group id"
   type        = string
 }
+variable "project_name" {}

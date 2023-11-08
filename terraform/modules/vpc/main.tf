@@ -13,7 +13,7 @@ resource "aws_subnet" "my_subnet" {
   cidr_block = var.subnet_cidrs[count.index]
   #availability_zone = element(["us-east-1a", "us-east-1b", "us-east-1d"], count.index)
   availability_zone       = data.aws_availability_zones.available_zones.names[count.index]
-  #map_public_ip_on_launch = true
+  map_public_ip_on_launch = true
   tags = {
     Name = "${var.project_name}-${data.aws_availability_zones.available_zones.names[count.index]}-Subnet"
   }

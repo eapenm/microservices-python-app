@@ -21,18 +21,28 @@ module "iam_roles" {
 module "eks" {
   source               = "../modules/eks_cluster"
   cluster_name         = var.cluster_name
-  eks_cluster_role_arn = var.eks_cluster_role_arn
-  subnet_ids           = var.subnet_ids
+  eks_cluster_role_arn = module.iam_roles.eks_cluster_role_arn
+  subnet_ids           = module.vpc.subnet_ids
   project_name         = var.project_name
 }
 
 
-# # Create the EKS node group using the EKS Node Group module
-# module "eks_node_group" {
-#   source          = "./modules/eks_node_group"
-#   cluster_name    = module.eks.cluster_name
-#   node_group_name = "my-node-group"
-# }
+# Create the EKS node group using the EKS Node Group module
+module "eks_node_group" {
+  source          = "../modules/eks_node_group"
+  clustername    = module.eks.cluster_name
+  node_group_name = var.node_group_name
+  eks_cluster_node_role_arn = module.iam_roles.eks_cluster_node_role_arn
+  min_size     = var.min_size
+  desired_size = var.desired_size
+  max_size     = var.max_size
+  instance_types = var.instance_types
+  subnet_ids     = module.vpc.subnet_ids
+  source_security_group_ids = module.vpc.node_security_group_id
+  project_name         = var.project_name
+
+
+}
 
 
 
