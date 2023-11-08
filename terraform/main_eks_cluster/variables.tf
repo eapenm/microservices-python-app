@@ -34,3 +34,4 @@ variable "subnet_ids" {
   description = "Name the subnet_ids"
   type        = list(string)
 }
+variable "project_name" {}

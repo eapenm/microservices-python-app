@@ -19,10 +19,11 @@ module "iam_roles" {
 
 # Create the EKS cluster using the EKS module
 module "eks" {
-  source       = "../modules/eks"
-  cluster_name = "my-eks-cluster"
-  #   vpc_id        = module.vpc.vpc_id
-  #   subnet_ids    = module.vpc.public_subnet_ids
+  source               = "../modules/eks"
+  cluster_name         = var.cluster_name
+  eks_cluster_role_arn = var.eks_cluster_role_arn
+  subnet_ids           = var.subnet_ids
+  project_name         = var.project_name
 }
 
 

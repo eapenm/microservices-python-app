@@ -9,3 +9,4 @@ eks-cluster-node-role = "my-eks-cluster-node-role"
 # EKS Cluster
 
 cluster_name = "my-eks-cluster"
+
