@@ -17,13 +17,13 @@ module "iam_roles" {
 }
 
 
-# # Create the EKS cluster using the EKS module
-# module "eks" {
-#   source       = "./modules/eks"
-#   cluster_name = "my-eks-cluster"
-#   #   vpc_id        = module.vpc.vpc_id
-#   #   subnet_ids    = module.vpc.public_subnet_ids
-# }
+# Create the EKS cluster using the EKS module
+module "eks" {
+  source       = "../modules/eks"
+  cluster_name = "my-eks-cluster"
+  #   vpc_id        = module.vpc.vpc_id
+  #   subnet_ids    = module.vpc.public_subnet_ids
+}
 
 
 # # Create the EKS node group using the EKS Node Group module

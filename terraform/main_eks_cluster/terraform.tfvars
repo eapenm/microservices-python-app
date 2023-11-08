@@ -6,3 +6,6 @@ project_name = "Microservice on EKS"
 #IAM role
 eks-cluster-role      = "my-eks-cluster-role"
 eks-cluster-node-role = "my-eks-cluster-node-role"
+# EKS Cluster
+
+cluster_name = "my-eks-cluster"

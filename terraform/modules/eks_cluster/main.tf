@@ -5,10 +5,10 @@ resource "aws_eks_cluster" "my_eks_cluster" {
 
   vpc_config {
     # subnet_ids = aws_subnet.my_subnet[*].id
-    subnet_ids= var.subnet_ids
+    subnet_ids = var.subnet_ids
   }
   tags = {
-    name = "EKS-Cluster"
+    name = "${var.project_name}-EKS-Cluster"
   }
 }
 
