@@ -13,3 +13,7 @@ variable "project_name" {
   # description = "Microservice on EKS"  
 }
 variable "region" {}
+
+# IAM Role file
+variable "eks-cluster-role" {}
+variable "eks-cluster-node-role" {}

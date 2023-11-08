@@ -10,9 +10,11 @@ module "vpc" {
   project_name = var.project_name
 }
 # IAM Roles
-# module "iam_roles" {
-#   source = "../modules/iam_roles"
-# }
+module "iam_roles" {
+  source                = "../modules/iam_roles"
+  eks-cluster-role      = var.eks-cluster-role
+  eks-cluster-node-role = var.eks-cluster-node-role
+}
 
 
 # # Create the EKS cluster using the EKS module
