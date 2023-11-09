@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: notification
-          image: eapen101/notification
+          image: nasi101/notification
           envFrom:
             - configMapRef:
                 name: notification-configmap
