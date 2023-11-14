@@ -66,6 +66,33 @@ resource "aws_security_group" "eks_node_security_group" {
   }
 
   # Add more inbound rules as needed
+  ingress {
+    from_port   = 30005
+    to_port     = 30005
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 30004
+    to_port     = 30004
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 30003
+    to_port     = 30003
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 30002
+    to_port     = 30002
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   # Outbound rules
   egress {

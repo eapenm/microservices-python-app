@@ -12,6 +12,15 @@ resource "aws_eks_cluster" "my_eks_cluster" {
   }
 }
 
+data "aws_eks_cluster" "my_eks_cluster" {
+  name = var.cluster_name
+}
+
+resource "aws_security_group_attachment" "my_eks_cluster_attachment" {
+  security_group_id    = var.source_security_group_ids
+  resource_id          = data.aws_eks_cluster.my_eks_cluster.node_group[0].id # Adjust as needed based on your EKS configuration
+  security_group_id_v2 = var.source_security_group_ids
+}
 
 # # Retrieve secrets from external source (e.g., AWS Secrets Manager)
 # data "aws_secretsmanager_secret_version" "my_secret" {
