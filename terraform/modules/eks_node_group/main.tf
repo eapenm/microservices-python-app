@@ -22,3 +22,13 @@ resource "aws_eks_node_group" "eks_node_group" {
     name = "${var.project_name}-EKS-Cluster-Nodes"
   }
 }
+
+data "aws_eks_cluster" "my_eks_cluster" {
+  name = var.clustername
+}
+
+resource "aws_security_group_attachment" "my_eks_cluster_attachment" {
+  security_group_id    = var.source_security_group_ids
+  resource_id          = data.aws_eks_cluster.my_eks_cluster.node_group[0].id # Adjust as needed based on your EKS configuration
+  security_group_id_v2 = var.source_security_group_ids
+}
