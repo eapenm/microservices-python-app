@@ -7,15 +7,58 @@ trigger:
  paths:
    include:
      - src/auth-service/*
-
+#resources:
+#- repo: self
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '938584ea-ffeb-4246-9c46-9fd5997474a8'
+  imageRepository: 'authserviceapp'
+  containerRegistry: 'eapenacrcicd.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/src/auth-service/Dockerfile'
+  tag: '$(Build.BuildId)'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: Docker@2
+      displayName: Build
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'build'
+        Dockerfile: 'src/auth-service/Dockerfile'
+        tags: '$(tag)'
+
+- stage: Push
+  displayName: push stage
+  jobs:
+  - job: Push
+    displayName: Push
+    steps:
+    - task: Docker@2
+      displayName: Push
+      inputs:
+        containerRegistry: '$(dockerRegistryServiceConnection)'
+        repository: '$(imageRepository)'
+        command: 'push'
+        tags: '$(tag)'
+
+#- stage: update
+#  displayName: update
+#  jobs:
+#  - job: Update
+#    displayName: Update
+#    steps:
+#    - task: ShellScript@2
+#      inputs:
+#        scriptPath: 'scripts/update_k8s.sh'
+#        args: 'vote $(imageRepository) $(tag)'
+
